@@ -1,3 +1,4 @@
+using TrKarekod.Model;
 using TrKarekod.Tlv;
 
 namespace TrKarekod;
@@ -47,6 +48,15 @@ public sealed class KarekodParseResult
 
     /// <summary>True when the CRC was present and matched. A valid CRC proves integrity in transit, not authenticity.</summary>
     public bool CrcValid { get; }
+
+    /// <summary>The typed merchant-presented code; set only when the payload is valid and of that kind.</summary>
+    public MerchantKarekod? Merchant { get; internal init; }
+
+    /// <summary>The typed person-to-person code; set only when the payload is valid and of that kind.</summary>
+    public PersonToPersonKarekod? PersonToPerson { get; internal init; }
+
+    /// <summary>The typed short code; set only when the payload is valid and of that kind.</summary>
+    public ShortKarekod? ShortCode { get; internal init; }
 
     /// <summary>True when there is no error-level diagnostic.</summary>
     public bool IsValid => !Diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error);

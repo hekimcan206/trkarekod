@@ -1,3 +1,4 @@
+using TrKarekod.Model;
 using TrKarekod.Schema;
 using TrKarekod.Tlv;
 using TrKarekod.Validation;
@@ -34,6 +35,12 @@ public static class Karekod
             return Finish(payload, KarekodKind.Unknown, [], diagnostics, crcValid: false);
         }
 
+        if (ShortCodeParser.LooksLikeShortCode(payload))
+        {
+            var shortCode = ShortCodeParser.Parse(payload, diagnostics, out var shortCrcValid);
+            return Finish(payload, KarekodKind.ShortCode, [], diagnostics, shortCrcValid, shortCode: shortCode);
+        }
+
         var (kind, schema) = Detect(payload);
         if (schema is null)
         {
@@ -55,7 +62,17 @@ public static class Karekod
             SchemaValidator.Validate(nodes, schema, string.Empty, diagnostics);
         }
 
-        return Finish(payload, kind, nodes, diagnostics, crcValid);
+        MerchantKarekod? merchant = null;
+        PersonToPersonKarekod? personToPerson = null;
+        if (structureOk)
+        {
+            // Business rules read fields through the same path lookup the caller gets.
+            var interim = new KarekodParseResult(payload, kind, nodes, diagnostics, crcValid);
+            merchant = kind == KarekodKind.MerchantPresented ? BusinessRules.CheckMerchant(interim, diagnostics) : null;
+            personToPerson = kind == KarekodKind.PersonToPerson ? BusinessRules.CheckPersonToPerson(interim, diagnostics) : null;
+        }
+
+        return Finish(payload, kind, nodes, diagnostics, crcValid, merchant, personToPerson);
     }
 
     private static (KarekodKind Kind, FieldSchema? Schema) Detect(string payload)
@@ -110,7 +127,15 @@ public static class Karekod
         return true;
     }
 
-    private static KarekodParseResult Finish(string payload, KarekodKind kind, IReadOnlyList<TlvNode> nodes, List<KarekodDiagnostic> diagnostics, bool crcValid)
+    private static KarekodParseResult Finish(
+        string payload,
+        KarekodKind kind,
+        IReadOnlyList<TlvNode> nodes,
+        List<KarekodDiagnostic> diagnostics,
+        bool crcValid,
+        MerchantKarekod? merchant = null,
+        PersonToPersonKarekod? personToPerson = null,
+        ShortKarekod? shortCode = null)
     {
         // Stable order for humans and golden files: errors first, then by position.
         var ordered = diagnostics
@@ -118,7 +143,12 @@ public static class Karekod
             .ThenBy(d => d.Offset < 0 ? int.MaxValue : d.Offset)
             .ThenBy(d => d.Code, StringComparer.Ordinal)
             .ToList();
-        return new KarekodParseResult(payload, kind, nodes, ordered, crcValid);
+        return new KarekodParseResult(payload, kind, nodes, ordered, crcValid)
+        {
+            Merchant = merchant,
+            PersonToPerson = personToPerson,
+            ShortCode = shortCode,
+        };
     }
 
     private static KarekodDiagnostic Error(string code, string path, int offset, string message) =>
