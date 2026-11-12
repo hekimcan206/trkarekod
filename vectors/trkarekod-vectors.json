@@ -1,0 +1,660 @@
+{
+  "description": "TR Karekod test vectors: official samples from the TCMB and BKM guides and negative vectors derived from them. Error and warning codes are documented in the README. Generated and verified by tests/TrKarekod.Tests/VectorFileTests.cs.",
+  "crc": "CRC-16/CCITT-FALSE (poly 0x1021, init 0xFFFF) over the UTF-8 bytes up to and including \u00276304\u0027; short codes: over the first 50 characters.",
+  "vectors": [
+    {
+      "name": "fast-sale",
+      "source": "TCMB, FAST - TR Karekod Teknik İlke ve Kuralları Rehberi, v1.4 (May 2024)",
+      "description": "FAST dynamic merchant sale (long code); contains İSTANBUL, so the CRC is over UTF-8.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963043F2E",
+      "kind": "MerchantPresented",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [
+        "TRK045 30.01"
+      ],
+      "fields": {
+        "00": "01",
+        "01": "12",
+        "30.00": "TR.GOV.TCMB.FAST",
+        "30.01": "TR123456789012345678901234",
+        "30.02": "01",
+        "30.20": "E200C014A30EFCDC7E9F379CE0766A68",
+        "49": "0023415672",
+        "50": "3993942332851791",
+        "51.00": "10",
+        "51.02": "0010",
+        "51.03": "23451017",
+        "51.04": "02",
+        "51.05": "12345678901234567890ABC",
+        "51.06": "200729153059",
+        "51.07": "200729163059",
+        "52": "5499",
+        "53": "949",
+        "54": "000000015050",
+        "58": "TR",
+        "59": "ABC GIDA",
+        "60": "İSTANBUL",
+        "61": "34100",
+        "62.01": "TLK01230405",
+        "62.02": "903125075000",
+        "62.03": "AVMSTR",
+        "62.04": "2315634123",
+        "62.06": "0518894111",
+        "62.08": "09",
+        "63": "3F2E"
+      }
+    },
+    {
+      "name": "fast-refund",
+      "source": "TCMB, FAST - TR Karekod Teknik İlke ve Kuralları Rehberi, v1.4 (May 2024)",
+      "description": "FAST merchant refund: flow type 04 with refund reference 31.01.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR0200950001000003540000100202042032E200C014A30EFCDC7E9F379CE0766A68313201282012180960000000000000123456491000234156755193000210020409500310REF0950D12040202052312345678901234567890ABC0612210215000000071222123100000052045499530394954120000000150505802TR5913MERKEZ OLUMLU6006ANKARA620608020063048B01",
+      "kind": "MerchantPresented",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [],
+      "fields": {
+        "00": "01",
+        "01": "12",
+        "30.00": "TR.GOV.TCMB.FAST",
+        "30.01": "TR020095000100000354000010",
+        "30.02": "04",
+        "30.20": "E200C014A30EFCDC7E9F379CE0766A68",
+        "31.01": "2012180960000000000000123456",
+        "49": "0023415675",
+        "51.00": "10",
+        "51.02": "0950",
+        "51.03": "REF0950D12",
+        "51.04": "02",
+        "51.05": "12345678901234567890ABC",
+        "51.06": "210215000000",
+        "51.07": "221231000000",
+        "52": "5499",
+        "53": "949",
+        "54": "000000015050",
+        "58": "TR",
+        "59": "MERKEZ OLUMLU",
+        "60": "ANKARA",
+        "62.08": "00",
+        "63": "8B01"
+      }
+    },
+    {
+      "name": "fast-p2p",
+      "source": "TCMB, FAST - TR Karekod Teknik İlke ve Kuralları Rehberi, v1.4 (May 2024)",
+      "description": "FAST person-to-person code (format indicator 75).",
+      "payload": "750210010212020400100310RFR234510106122005291401590712200530140159541200000001505061520126TR1234567890123456789012340712HASAN YILDIZ1002032032F93CC13E3E6410C1BADEEAF349E09A565016399394233285179163045E7C",
+      "kind": "PersonToPerson",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [
+        "TRK045 61.01"
+      ],
+      "fields": {
+        "75": "10",
+        "01": "12",
+        "02": "0010",
+        "03": "RFR2345101",
+        "06": "200529140159",
+        "07": "200530140159",
+        "54": "000000015050",
+        "61.01": "TR123456789012345678901234",
+        "61.07": "HASAN YILDIZ",
+        "61.10": "03",
+        "20": "F93CC13E3E6410C1BADEEAF349E09A56",
+        "50": "3993942332851791",
+        "63": "5E7C"
+      }
+    },
+    {
+      "name": "fast-short",
+      "source": "TCMB, FAST - TR Karekod Teknik İlke ve Kuralları Rehberi, v1.4 (May 2024)",
+      "description": "FAST short code (indicator 97).",
+      "payload": "970010REF666777888E7054DBB31781D7A15F5043372E802C55BFD",
+      "kind": "ShortCode",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "bkm-card",
+      "source": "TCMB/BKM, Kartlı Ödemeler TR Karekod Teknik İlke ve Kuralları Rehberi, v1.2 (Jan 2024)",
+      "description": "BKM card payment long code (template 26), static.",
+      "payload": "00020101021126680010TR.COM.BKM060110820012345678901234567890910TDVMAUJ0001001N110203491000234156725195000210020400010312180904121314040202052312345678901234567890ABC0612200529140159071220052915015952041234530394954120000000001235802TR5906ABCDEF6008ISTANBUL6304C2B6",
+      "kind": "MerchantPresented",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [],
+      "fields": {
+        "00": "01",
+        "01": "11",
+        "26.00": "TR.COM.BKM",
+        "26.06": "1",
+        "26.08": "01234567890123456789",
+        "26.09": "TDVMAUJ000",
+        "26.10": "N",
+        "26.11": "03",
+        "49": "0023415672",
+        "51.00": "10",
+        "51.02": "0001",
+        "51.03": "180904121314",
+        "51.04": "02",
+        "51.05": "12345678901234567890ABC",
+        "51.06": "200529140159",
+        "51.07": "200529150159",
+        "52": "1234",
+        "53": "949",
+        "54": "000000000123",
+        "58": "TR",
+        "59": "ABCDEF",
+        "60": "ISTANBUL",
+        "63": "C2B6"
+      }
+    },
+    {
+      "name": "bkm-short",
+      "source": "TCMB/BKM, Kartlı Ödemeler TR Karekod Teknik İlke ve Kuralları Rehberi, v1.2 (Jan 2024)",
+      "description": "BKM short code (indicator 99).",
+      "payload": "9908001234567890120123456789012345678901234567891280BE",
+      "kind": "ShortCode",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "mobile-cpm",
+      "source": "TCMB, Mobil Ödemeler TR Karekod İlke ve Kuralları Rehberi, v1.0 (Dec 2020)",
+      "description": "Consumer-presented code (format indicator 85); structure and CRC only.",
+      "payload": "85021001021102040742030817652401040110612201002140000071220123123595932410101T0208231458770310592623121404066123452032F2675AB8646A538D318346558012A7645016399394323285172063048C75",
+      "kind": "ConsumerPresented",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [],
+      "fields": {
+        "85": "10",
+        "01": "11",
+        "02": "0742",
+        "03": "17652401",
+        "04": "1",
+        "06": "201002140000",
+        "07": "201231235959",
+        "32.01": "T",
+        "32.02": "23145877",
+        "32.03": "5926231214",
+        "32.04": "612345",
+        "20": "F2675AB8646A538D318346558012A764",
+        "50": "3993943232851720",
+        "63": "8C75"
+      }
+    },
+    {
+      "name": "fast-not-used-field",
+      "source": "Derived from an official sample by this repository",
+      "description": "Adds tip indicator 55, which TR Karekod does not use: valid with a warning.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020955020163040A05",
+      "kind": "MerchantPresented",
+      "valid": true,
+      "crcValid": true,
+      "errors": [],
+      "warnings": [
+        "TRK045 30.01",
+        "TRK034 55"
+      ],
+      "fields": {
+        "00": "01",
+        "01": "12",
+        "30.00": "TR.GOV.TCMB.FAST",
+        "30.01": "TR123456789012345678901234",
+        "30.02": "01",
+        "30.20": "E200C014A30EFCDC7E9F379CE0766A68",
+        "49": "0023415672",
+        "50": "3993942332851791",
+        "51.00": "10",
+        "51.02": "0010",
+        "51.03": "23451017",
+        "51.04": "02",
+        "51.05": "12345678901234567890ABC",
+        "51.06": "200729153059",
+        "51.07": "200729163059",
+        "52": "5499",
+        "53": "949",
+        "54": "000000015050",
+        "58": "TR",
+        "59": "ABC GIDA",
+        "60": "İSTANBUL",
+        "61": "34100",
+        "62.01": "TLK01230405",
+        "62.02": "903125075000",
+        "62.03": "AVMSTR",
+        "62.04": "2315634123",
+        "62.06": "0518894111",
+        "62.08": "09",
+        "55": "01",
+        "63": "0A05"
+      }
+    },
+    {
+      "name": "fast-crc-mismatch",
+      "source": "Derived from an official sample by this repository",
+      "description": "Merchant name changed after signing; the CRC no longer matches.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABD GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963043F2E",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK011 63"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-crc-over-latin1",
+      "source": "Derived from an official sample by this repository",
+      "description": "CRC computed over ISO-8859-9/Latin-1 bytes instead of UTF-8 (the İ encodes differently).",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304B7F1",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK011 63"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-length-in-bytes",
+      "source": "Derived from an official sample by this repository",
+      "description": "City length written as UTF-8 bytes (09) instead of characters (08), then re-signed.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6009İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304924E",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK002"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "fast-truncated",
+      "source": "Derived from an official sample by this repository",
+      "description": "Last six characters lost (a damaged print or partial scan).",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK001",
+        "TRK010 63"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "fast-dynamic-without-amount",
+      "source": "Derived from an official sample by this repository",
+      "description": "Dynamic code with the amount (54) removed.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC061220072915305907122007291630595204549953039495802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963045DAE",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK040 54"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-dynamic-zero-amount",
+      "source": "Derived from an official sample by this repository",
+      "description": "Dynamic code with amount 0.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000000005802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963040346",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK040 54"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-dynamic-without-expiry",
+      "source": "Derived from an official sample by this repository",
+      "description": "Dynamic code with the expiry (51.07) removed.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791517500021002040010030823451017040202052312345678901234567890ABC061220072915305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963042327",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK041 51.07"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-expiry-before-creation",
+      "source": "Derived from an official sample by this repository",
+      "description": "Expiry earlier than the creation time.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072915300052045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963044A92",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK042 51.07"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-invalid-timestamp",
+      "source": "Derived from an official sample by this repository",
+      "description": "Creation time in month 13.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612201329153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304F5CC",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK046 51.06"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-wrong-currency",
+      "source": "Derived from an official sample by this repository",
+      "description": "FAST code in USD (840).",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530384054120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR0410231563412306100518894111080209630461EB",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK033 53"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-wrong-country",
+      "source": "Derived from an official sample by this repository",
+      "description": "Country code DE.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802DE5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963046B0C",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK033 58"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-missing-merchant-name",
+      "source": "Derived from an official sample by this repository",
+      "description": "Merchant name (59) removed.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR0410231563412306100518894111080209630498CD",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK030 59"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-name-too-long",
+      "source": "Derived from an official sample by this repository",
+      "description": "Merchant name of 26 characters (limit 25).",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5926ABCDEFGHIJKLMNOPQRSTUVWXYZ6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR041023156341230610051889411108020963045CF7",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK031 59"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-amount-not-numeric",
+      "source": "Derived from an official sample by this repository",
+      "description": "Amount with a letter.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC06122007291530590712200729163059520454995303949541200000001505A5802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304086B",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK032 54",
+        "TRK040 54"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-duplicate-field",
+      "source": "Derived from an official sample by this repository",
+      "description": "Country code appears twice.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802095802TR6304FA81",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK004 58"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-bad-location",
+      "source": "Derived from an official sample by this repository",
+      "description": "Latitude 99.9 degrees.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250169993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304FDB0",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK047 50"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-iban-malformed",
+      "source": "Derived from an official sample by this repository",
+      "description": "IBAN with a German country code.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126DE12345678901234567890123X0202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304D1A2",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK044 30.01"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "fast-wrong-guid",
+      "source": "Derived from an official sample by this repository",
+      "description": "FAST template with another scheme\u0027s GUID.",
+      "payload": "00020101021230920016TR.GOV.TCMB.XYZ10126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062750111TLK0123040502129031250750000306AVMSTR04102315634123061005188941110802096304015B",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK033 30.00"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-no-payment-purpose",
+      "source": "Derived from an official sample by this repository",
+      "description": "FAST code without payment purpose 62.08.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR1234567890123456789012340202012032E200C014A30EFCDC7E9F379CE0766A684910002341567250163993942332851791519100021002040010030823451017040202052312345678901234567890ABC0612200729153059071220072916305952045499530394954120000000150505802TR5908ABC GIDA6008İSTANBUL61053410062690111TLK0123040502129031250750000306AVMSTR04102315634123061005188941116304353E",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK030 62.08"
+      ],
+      "warnings": [
+        "TRK045 30.01"
+      ]
+    },
+    {
+      "name": "fast-refund-wrong-purpose",
+      "source": "Derived from an official sample by this repository",
+      "description": "Refund with payment purpose 09 instead of 00.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR0200950001000003540000100202042032E200C014A30EFCDC7E9F379CE0766A68313201282012180960000000000000123456491000234156755193000210020409500310REF0950D12040202052312345678901234567890ABC0612210215000000071222123100000052045499530394954120000000150505802TR5913MERKEZ OLUMLU6006ANKARA62060802096304237D",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK043 62.08"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "fast-refund-missing-reference",
+      "source": "Derived from an official sample by this repository",
+      "description": "Refund without the original payment reference (31).",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR0200950001000003540000100202042032E200C014A30EFCDC7E9F379CE0766A68491000234156755193000210020409500310REF0950D12040202052312345678901234567890ABC0612210215000000071222123100000052045499530394954120000000150505802TR5913MERKEZ OLUMLU6006ANKARA62060802006304D094",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK043 31.01"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "fast-refund-bad-reference",
+      "source": "Derived from an official sample by this repository",
+      "description": "Refund reference with month 13.",
+      "payload": "00020101021230920016TR.GOV.TCMB.FAST0126TR0200950001000003540000100202042032E200C014A30EFCDC7E9F379CE0766A68313201282013180960000000000000123456491000234156755193000210020409500310REF0950D12040202052312345678901234567890ABC0612210215000000071222123100000052045499530394954120000000150505802TR5913MERKEZ OLUMLU6006ANKARA62060802006304D84B",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK049 31.01"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "bkm-refund-without-rrn",
+      "source": "Derived from an official sample by this repository",
+      "description": "BKM refund (transaction type 4) without the original RRN 26.13.",
+      "payload": "00020101021126680010TR.COM.BKM060140820012345678901234567890910TDVMAUJ0001001N110203491000234156725195000210020400010312180904121314040202052312345678901234567890ABC0612200529140159071220052915015952041234530394954120000000001235802TR5906ABCDEF6008ISTANBUL6304EE0F",
+      "kind": "MerchantPresented",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK030 26.13"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "p2p-dynamic-without-reference",
+      "source": "Derived from an official sample by this repository",
+      "description": "Dynamic person-to-person code without reference 03.",
+      "payload": "7502100102120204001006122005291401590712200530140159541200000001505061520126TR1234567890123456789012340712HASAN YILDIZ1002032032F93CC13E3E6410C1BADEEAF349E09A56501639939423328517916304FABE",
+      "kind": "PersonToPerson",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK030 03"
+      ],
+      "warnings": [
+        "TRK045 61.01"
+      ]
+    },
+    {
+      "name": "p2p-wrong-flow-type",
+      "source": "Derived from an official sample by this repository",
+      "description": "Person-to-person flow type 01 instead of 03.",
+      "payload": "750210010212020400100310RFR234510106122005291401590712200530140159541200000001505061520126TR1234567890123456789012340712HASAN YILDIZ1002012032F93CC13E3E6410C1BADEEAF349E09A56501639939423328517916304ED1C",
+      "kind": "PersonToPerson",
+      "valid": false,
+      "crcValid": true,
+      "errors": [
+        "TRK033 61.10"
+      ],
+      "warnings": [
+        "TRK045 61.01"
+      ]
+    },
+    {
+      "name": "short-wrong-length",
+      "source": "Derived from an official sample by this repository",
+      "description": "Short code with an extra character.",
+      "payload": "970010REF666777888E7054DBB31781D7A15F5043372E802C55BFD0",
+      "kind": "ShortCode",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK060"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "short-crc-mismatch",
+      "source": "Derived from an official sample by this repository",
+      "description": "Short code reference changed after signing.",
+      "payload": "970010REF667777888E7054DBB31781D7A15F5043372E802C55BFD",
+      "kind": "ShortCode",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK011 crc"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "unknown-format",
+      "source": "Synthetic",
+      "description": "Not a TR Karekod at all (a URL).",
+      "payload": "https://example.com/pay?id=42",
+      "kind": "Unknown",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK020"
+      ],
+      "warnings": []
+    },
+    {
+      "name": "oversized",
+      "source": "Synthetic",
+      "description": "513 characters, over the EMVCo limit of 512.",
+      "payload": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "kind": "Unknown",
+      "valid": false,
+      "crcValid": false,
+      "errors": [
+        "TRK050"
+      ],
+      "warnings": []
+    }
+  ]
+}
