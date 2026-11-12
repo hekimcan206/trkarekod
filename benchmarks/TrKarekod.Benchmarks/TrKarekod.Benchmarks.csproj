@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Benchmarks are public by BenchmarkDotNet's contract and are not an API surface. -->
+    <NoWarn>$(NoWarn);CA1515;CA1822</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TrKarekod\TrKarekod.csproj" />
+    <ProjectReference Include="..\..\src\TrKarekod.Rendering\TrKarekod.Rendering.csproj" />
+  </ItemGroup>
+
+</Project>

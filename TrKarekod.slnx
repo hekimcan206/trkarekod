@@ -7,6 +7,9 @@
   <Folder Name="/samples/">
     <Project Path="samples/TrKarekod.Api/TrKarekod.Api.csproj" />
   </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/TrKarekod.Benchmarks/TrKarekod.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TrKarekod.Tests/TrKarekod.Tests.csproj" />
   </Folder>
