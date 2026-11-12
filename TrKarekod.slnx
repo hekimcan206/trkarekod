@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TrKarekod/TrKarekod.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TrKarekod.Tests/TrKarekod.Tests.csproj" />
+  </Folder>
+</Solution>

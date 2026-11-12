@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>TrKarekod</PackageId>
+    <Description>Parser, validator and generator for TR Karekod (the EMVCo-based Turkish payment QR code): rune-aware TLV, CRC-16/CCITT-FALSE, static and dynamic FAST merchant codes, person-to-person and short codes, with diagnostics instead of exceptions.</Description>
+    <PackageTags>tr-karekod;karekod;emvco;qr;payment;fast;tlv;crc16;turkey</PackageTags>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TrKarekod.Tests" />
+    <InternalsVisibleTo Include="TrKarekod.Benchmarks" />
+  </ItemGroup>
+
+</Project>
