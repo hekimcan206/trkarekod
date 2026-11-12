@@ -10,6 +10,7 @@
     <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="FsCheck.Xunit.v3" />
     <PackageReference Include="ZXing.Net" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
     <ProjectReference Include="..\..\src\TrKarekod\TrKarekod.csproj" />
     <ProjectReference Include="..\..\src\TrKarekod.Rendering\TrKarekod.Rendering.csproj" />
     <ProjectReference Include="..\..\src\TrKarekod.Cli\TrKarekod.Cli.csproj" />
+    <ProjectReference Include="..\..\samples\TrKarekod.Api\TrKarekod.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

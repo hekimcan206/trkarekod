@@ -1,0 +1,24 @@
+# docker compose up --build
+# The sample API issues signed FAST codes, parses, verifies and renders them; the demo container checks every
+# published test vector with the CLI and exits 0 only if all of them behave exactly as documented.
+name: trkarekod
+
+services:
+  api:
+    build: .
+    image: trkarekod-sample:local
+    environment:
+      # Demo-only key so `docker compose up` needs no setup. Real deployments inject their own (see .env.example).
+      Karekod__ProducerKeyHex: ${PRODUCER_KEY_HEX:-64656d6f2d6f6e6c792d6b65792d646f2d6e6f742d757365}
+      Karekod__ProducerCode: ${PRODUCER_CODE:-0010}
+    ports:
+      - "127.0.0.1:${API_PORT:-58290}:8080"
+
+  demo:
+    image: trkarekod-sample:local
+    pull_policy: never
+    entrypoint: ["dotnet", "/app/cli/TrKarekod.Cli.dll", "vectors"]
+    restart: "no"
+    depends_on:
+      api:
+        condition: service_started

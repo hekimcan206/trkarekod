@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <RootNamespace>TrKarekod.Api</RootNamespace>
+    <Description>Sample HTTP API over the TrKarekod library: build signed FAST codes, parse, verify and render them. Synthetic data only.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TrKarekod\TrKarekod.csproj" />
+    <ProjectReference Include="..\..\src\TrKarekod.Rendering\TrKarekod.Rendering.csproj" />
+  </ItemGroup>
+
+</Project>
