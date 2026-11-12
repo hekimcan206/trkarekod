@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TrKarekod/TrKarekod.csproj" />
+    <Project Path="src/TrKarekod.Rendering/TrKarekod.Rendering.csproj" />
+    <Project Path="src/TrKarekod.Cli/TrKarekod.Cli.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TrKarekod.Tests/TrKarekod.Tests.csproj" />

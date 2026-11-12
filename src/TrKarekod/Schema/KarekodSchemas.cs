@@ -120,6 +120,35 @@ public static class KarekodSchemas
         new("63", "CRC", "CRC", SpecialAlphanumeric, 4, 4, Mandatory),
     ], UnknownFieldHandling.Accept);
 
+    /// <summary>The root table of a usage model, or null for short codes and unknown input.</summary>
+    public static FieldSchema? RootOf(KarekodKind kind) => kind switch
+    {
+        KarekodKind.MerchantPresented => MerchantPresented,
+        KarekodKind.PersonToPerson => PersonToPerson,
+        KarekodKind.ConsumerPresented => ConsumerPresented,
+        _ => null,
+    };
+
+    /// <summary>The table row for a dotted path such as <c>62.08</c>, or null when the path is not defined.</summary>
+    public static FieldSpec? FieldAt(KarekodKind kind, string path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        var schema = RootOf(kind);
+        FieldSpec? spec = null;
+        foreach (var id in path.Split('.'))
+        {
+            spec = schema?.Find(id);
+            if (spec is null)
+            {
+                return null;
+            }
+
+            schema = spec.Template;
+        }
+
+        return spec;
+    }
+
     private static List<FieldSpec> BuildMerchantRoot()
     {
         var rows = new List<FieldSpec>

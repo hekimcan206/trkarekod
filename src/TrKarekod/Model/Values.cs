@@ -110,6 +110,23 @@ public static class KarekodTimestamp
 {
     private const string Format = "yyMMddHHmmss";
 
+    /// <summary>
+    /// Current Türkiye local time for creation and expiry fields. Falls back to the fixed UTC+3 offset (in force since
+    /// 2016) when the host has no time zone database, as in chiseled container images.
+    /// </summary>
+    public static DateTime TurkeyNow(TimeProvider? timeProvider = null)
+    {
+        var utc = (timeProvider ?? TimeProvider.System).GetUtcNow();
+        try
+        {
+            return TimeZoneInfo.ConvertTime(utc, TimeZoneInfo.FindSystemTimeZoneById("Europe/Istanbul")).DateTime;
+        }
+        catch (Exception ex) when (ex is TimeZoneNotFoundException or InvalidTimeZoneException)
+        {
+            return utc.ToOffset(TimeSpan.FromHours(3)).DateTime;
+        }
+    }
+
     /// <summary>Parses a 12-digit timestamp; false when it is not a real date and time.</summary>
     public static bool TryParse(string? value, out DateTime timestamp) =>
         DateTime.TryParseExact(value, Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out timestamp);

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TrKarekod.Cli</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>trkarekod</ToolCommandName>
+    <PackageId>TrKarekod.Cli</PackageId>
+    <Description>Command-line tool to parse, validate, build and render TR Karekod (Turkish payment QR) payloads.</Description>
+    <PackageTags>tr-karekod;karekod;emvco;qr;payment;fast;cli;dotnet-tool</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrKarekod\TrKarekod.csproj" />
+    <ProjectReference Include="..\TrKarekod.Rendering\TrKarekod.Rendering.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TrKarekod.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The published vector file, so `trkarekod vectors` can self-check any installed build. -->
+    <EmbeddedResource Include="../../vectors/trkarekod-vectors.json" LogicalName="trkarekod-vectors.json" Link="trkarekod-vectors.json" />
+  </ItemGroup>
+
+</Project>

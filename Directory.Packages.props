@@ -4,7 +4,12 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
+  <ItemGroup Label="Rendering">
+    <PackageVersion Include="QRCoder" Version="1.8.0" />
+  </ItemGroup>
+
   <ItemGroup Label="Testing">
+    <PackageVersion Include="ZXing.Net" Version="0.16.11" />
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
     <PackageVersion Include="FsCheck.Xunit.v3" Version="3.6.0" />

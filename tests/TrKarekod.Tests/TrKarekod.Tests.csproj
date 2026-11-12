@@ -9,11 +9,14 @@
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="FsCheck.Xunit.v3" />
+    <PackageReference Include="ZXing.Net" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TrKarekod\TrKarekod.csproj" />
+    <ProjectReference Include="..\..\src\TrKarekod.Rendering\TrKarekod.Rendering.csproj" />
+    <ProjectReference Include="..\..\src\TrKarekod.Cli\TrKarekod.Cli.csproj" />
   </ItemGroup>
 
   <ItemGroup>

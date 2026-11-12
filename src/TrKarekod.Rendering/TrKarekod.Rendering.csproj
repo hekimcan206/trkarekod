@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>QR symbol rendering for TR Karekod payloads (PNG and module matrix), shared by the CLI and the sample API.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QRCoder" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrKarekod\TrKarekod.csproj" />
+  </ItemGroup>
+
+</Project>
