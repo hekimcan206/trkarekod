@@ -135,7 +135,7 @@ jobs:
           return result.IsValid ? 0 : 1;
           CS
           dotnet run --configuration Release | tee out.txt
-          grep -q "MerchantPresented valid=True amount=150.50" out.txt
+          grep -qE "^MerchantPresented valid=True amount=150.50?$" out.txt
 
       - name: Install the tool and run its self-check
         run: |
