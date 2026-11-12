@@ -1,0 +1,202 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+jobs:
+  build-test:
+    name: build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - uses: actions/cache@v6
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'global.json') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore
+
+      # Package versions are pinned and updated by hand, so a known vulnerability in any direct or
+      # transitive package fails the build. Fix it with a pinned upgrade in Directory.Packages.props.
+      - name: Audit for vulnerable packages
+        run: |
+          set -o pipefail
+          dotnet list package --vulnerable --include-transitive 2>&1 | tee vulnerable-packages.txt
+          if grep -q "has the following vulnerable packages" vulnerable-packages.txt; then
+            echo "::error::Known-vulnerable NuGet packages found (see the list above)"
+            exit 1
+          fi
+
+      - name: Format check
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Build (warnings are errors)
+        run: dotnet build --no-restore --configuration Release
+
+      # Unit, property, golden (vectors/trkarekod-vectors.json), QR round-trip, CLI and in-process API tests.
+      # The library has no database or broker, so there is nothing for Testcontainers to start.
+      - name: Test
+        run: >
+          dotnet test --no-build --configuration Release
+          --coverage --coverage-output-format cobertura
+          --results-directory "${{ github.workspace }}/TestResults"
+
+      - name: Coverage summary
+        if: always()
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.5.12
+        with:
+          reports: TestResults/**/*.cobertura.xml
+          targetdir: coverage
+          reporttypes: MarkdownSummaryGithub;TextSummary
+          assemblyfilters: "-*Tests*;-TrKarekod.Benchmarks"
+          filefilters: "-*/obj/*"
+
+      - name: Publish coverage to job summary
+        if: always()
+        run: |
+          if [ -f coverage/SummaryGithub.md ]; then
+            cat coverage/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+            cat coverage/Summary.txt
+          else
+            echo "No coverage report produced."
+          fi
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: test-results
+          path: TestResults/
+          retention-days: 7
+
+  packages:
+    name: NuGet packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      # The packages are the product: pack them, then use them from a local feed exactly as a user would from nuget.org.
+      - name: Pack
+        run: |
+          dotnet pack src/TrKarekod --configuration Release --output nupkg
+          dotnet pack src/TrKarekod.Cli --configuration Release --output nupkg
+          ls -l nupkg
+
+      - name: Consume the library from a new project
+        run: |
+          # Outside the checkout, so the repository's Directory.*.props (central package management) do not apply.
+          mkdir "$RUNNER_TEMP/consumer" && cd "$RUNNER_TEMP/consumer"
+          dotnet new console --framework net10.0 --name Consumer --output .
+          dotnet new nugetconfig
+          dotnet nuget add source "$GITHUB_WORKSPACE/nupkg" --name local
+          dotnet add package TrKarekod --version 1.0.0
+          cat > Program.cs <<'CS'
+          using TrKarekod;
+          using TrKarekod.Building;
+
+          var now = new DateTime(2026, 11, 12, 10, 30, 0);
+          var payload = new FastMerchantKarekodBuilder()
+              .Dynamic(150.50m, now.AddMinutes(10))
+              .Iban("TR330006100519786457841326")
+              .SignWith(new byte[32])
+              .Producer("0010", "CI-1", now)
+              .Merchant("ABC GIDA", "İSTANBUL", "5499")
+              .PaymentPurpose("01")
+              .Build();
+          var result = Karekod.Parse(payload);
+          Console.WriteLine($"{result.Kind} valid={result.IsValid} amount={result.Merchant?.Amount}");
+          return result.IsValid ? 0 : 1;
+          CS
+          dotnet run --configuration Release | tee out.txt
+          grep -q "MerchantPresented valid=True amount=150.50" out.txt
+
+      - name: Install the tool and run its self-check
+        run: |
+          dotnet tool install --tool-path "$RUNNER_TEMP/tools" --add-source nupkg TrKarekod.Cli --version 1.0.0
+          "$RUNNER_TEMP/tools/trkarekod" vectors | tee vectors.txt
+          grep -qE '^37 passed, 0 failed$' vectors.txt
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: nupkg/*
+          retention-days: 14
+
+  compose-demo:
+    name: container & compose demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      # The README promises `docker compose up` runs the demo with zero manual steps; this job keeps it true.
+      - name: Start the stack
+        run: docker compose up -d --build
+
+      - name: Image runs as non-root
+        run: |
+          user=$(docker image inspect trkarekod-sample:local --format '{{.Config.User}}')
+          echo "user: ${user}"
+          test -n "${user}" && test "${user}" != "0" && test "${user}" != "root"
+
+      - name: Every published vector behaves as documented
+        run: |
+          code=$(docker wait trkarekod-demo-1)
+          docker compose logs --no-log-prefix demo | tee demo.log
+          test "${code}" = "0"
+          grep -qE '^37 passed, 0 failed$' demo.log
+
+      - name: Issue, verify, tamper and render through the API
+        run: |
+          for i in $(seq 1 30); do curl -sf localhost:58290/health/ready && break; sleep 1; done
+          curl -sf -X POST localhost:58290/v1/karekod/fast -H 'Content-Type: application/json' \
+            -d '{"iban":"TR330006100519786457841326","merchantName":"Kafe 42","city":"İZMİR","reference":"CI-0001","paymentPurpose":"01","merchantCategoryCode":"5814","amount":87.50,"expiresInMinutes":5}' \
+            | tee issued.json
+          payload=$(jq -r .payload issued.json)
+          jq -n --arg p "$payload" '{payload:$p}' > verify.json
+          curl -sf -X POST localhost:58290/v1/karekod/verify -H 'Content-Type: application/json' -d @verify.json | tee verified.json
+          jq -e '.valid and .producerHashValid and (.expired | not)' verified.json
+          # Change the amount and re-sign the CRC: integrity checks pass, the producer hash does not.
+          forged=$(echo "$payload" | sed 's/5412000000008750/5412000000000100/')
+          body="${forged%????}"
+          crc=$(printf '%s' "$body" | python3 -c "import sys;d=sys.stdin.buffer.read();c=0xFFFF
+          for b in d:
+              c^=b<<8
+              for _ in range(8): c=((c<<1)^0x1021)&0xFFFF if c&0x8000 else (c<<1)&0xFFFF
+          print('%04X'%c)")
+          jq -n --arg p "${body}${crc}" '{payload:$p}' > forged.json
+          curl -sf -X POST localhost:58290/v1/karekod/verify -H 'Content-Type: application/json' -d @forged.json | tee forged-result.json
+          jq -e '.valid and (.producerHashValid | not)' forged-result.json
+          curl -sf -X POST localhost:58290/v1/karekod/render -H 'Content-Type: application/json' -d @verify.json -o code.png
+          file code.png | grep -q 'PNG image data'
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs
