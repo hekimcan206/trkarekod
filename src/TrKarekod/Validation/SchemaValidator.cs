@@ -69,7 +69,7 @@ internal static class SchemaValidator
                     : $"{spec.Name} contains control characters."));
         }
 
-        if (spec.AllowedValues is { } allowed && !allowed.Contains(node.Value, StringComparer.Ordinal))
+        if (spec.AllowedValues is { } allowed && !IsAllowed(allowed, node.Value))
         {
             diagnostics.Add(new(DiagnosticCodes.InvalidValue, DiagnosticSeverity.Error, node.Path, node.Offset,
                 $"{spec.Name} must be one of {string.Join(", ", allowed)}; was \"{node.Value}\"."));
@@ -88,6 +88,19 @@ internal static class SchemaValidator
         }
 
         return true;
+    }
+
+    private static bool IsAllowed(IReadOnlyList<string> allowed, string value)
+    {
+        for (var i = 0; i < allowed.Count; i++)
+        {
+            if (string.Equals(allowed[i], value, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool Contains(IReadOnlyList<TlvNode> nodes, string id)

@@ -6,6 +6,9 @@ namespace TrKarekod.Tlv;
 /// </summary>
 public static class TlvParser
 {
+    // IDs are two digits, so the 100 possible strings are shared instead of allocated per object.
+    private static readonly string[] Ids = [.. Enumerable.Range(0, 100).Select(n => n.ToString("D2", System.Globalization.CultureInfo.InvariantCulture))];
+
     /// <summary>Parses <paramref name="text"/> into data objects using <paramref name="layout"/> to find templates.</summary>
     public static IReadOnlyList<TlvNode> Parse(string text, ITlvLayout layout, ICollection<KarekodDiagnostic> diagnostics)
     {
@@ -34,7 +37,7 @@ public static class TlvParser
                 break;
             }
 
-            var id = text.Substring(i, 2);
+            var id = Ids[((text[i] - '0') * 10) + (text[i + 1] - '0')];
             var length = ((text[i + 2] - '0') * 10) + (text[i + 3] - '0');
             var path = parentPath.Length == 0 ? id : $"{parentPath}.{id}";
             if (length == 0)

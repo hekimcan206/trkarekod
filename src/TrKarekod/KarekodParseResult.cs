@@ -71,29 +71,34 @@ public sealed class KarekodParseResult
     public TlvNode? Find(string path)
     {
         ArgumentNullException.ThrowIfNull(path);
+
+        // Business rules call this dozens of times per parse, so it walks the path in place ("62.08" is two
+        // segments of two characters) instead of allocating with string.Split.
         TlvNode? current = null;
         var level = Nodes;
-        foreach (var id in path.Split('.'))
+        var remaining = path.AsSpan();
+        while (true)
         {
+            var dot = remaining.IndexOf('.');
+            var id = dot < 0 ? remaining : remaining[..dot];
             current = null;
             foreach (var node in level)
             {
-                if (node.Id == id)
+                if (id.SequenceEqual(node.Id))
                 {
                     current = node;
                     break;
                 }
             }
 
-            if (current is null)
+            if (current is null || dot < 0)
             {
-                return null;
+                return current;
             }
 
             level = current.Children;
+            remaining = remaining[(dot + 1)..];
         }
-
-        return current;
     }
 
     /// <summary>Value of the data object at <paramref name="path"/>, or null.</summary>
